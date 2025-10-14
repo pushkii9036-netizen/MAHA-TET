@@ -1,364 +1,415 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maha TET PYQ Test: शब्दांच्या जाती</title>
+    <title>मराठी अलंकार PYQ टेस्ट सिरीज | Maha TET</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tiro+Devanagari+Marathi:wght@400&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tiro+Devanagari+Marathi&display=swap');
-
         body {
             font-family: 'Inter', 'Tiro Devanagari Marathi', sans-serif;
         }
 
         /* Watermark Styling */
-        .watermark-container {
+        body::after {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .watermark-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 50px;
-            width: 150vw;
-            height: 150vh;
-            transform: rotate(-30deg) translate(-25%, -25%);
-        }
-
-        .watermark-item {
-            font-size: 14px;
-            font-weight: 600;
+            width: 100vw;
+            height: 100vh;
+            content: "SUCCESS DIGITAL CLASSES";
+            font-size: 8vw; /* Responsive font size */
             color: rgba(0, 0, 0, 0.05);
+            pointer-events: none;
+            z-index: -1;
+            transform: rotate(-35deg);
             text-align: center;
-            white-space: nowrap;
-        }
-        
-        /* Custom radio button styling */
-        .option-label {
-            display: block;
-            padding: 12px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
-        input[type="radio"]:checked + .option-label {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+        .option-btn {
+            transition: all 0.3s ease;
         }
 
-        /* Styling for results */
-        .correct-answer {
-            border-color: #16a34a !important;
-            background-color: #f0fdf4 !important;
+        .option-btn.selected {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            border-color: #2563eb; /* blue-600 */
         }
 
-        .wrong-answer {
-            border-color: #dc2626 !important;
-            background-color: #fef2f2 !important;
+        .option-btn.correct {
+            background-color: #22c55e; /* green-500 */
+            color: white;
+            border-color: #16a34a; /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #ef4444; /* red-500 */
+            color: white;
+            border-color: #dc2626; /* red-600 */
+        }
+
+        .option-btn:not([disabled]):hover {
+            background-color: #f3f4f6; /* gray-100 */
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
 
-    <!-- Watermark Background -->
-    <div class="watermark-container">
-        <div class="watermark-grid" id="watermark-grid">
-            <!-- Watermarks will be added by JS -->
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8 flex items-center justify-center min-h-screen">
+
+    <div id="quiz-container" class="w-full max-w-3xl bg-white p-6 md:p-8 rounded-2xl shadow-xl relative">
+        <!-- Branding Corner -->
+        <div class="absolute top-4 right-6 text-sm font-bold text-blue-700 opacity-80 select-none">
+            SUCCESS DIGITAL CLASSES
         </div>
-    </div>
 
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-blue-600">Maha TET सराव प्रश्नपत्रिका</h1>
-            <p class="text-lg sm:text-xl text-gray-600 mt-2">विषय: मराठी व्याकरण (शब्दांच्या जाती)</p>
-        </header>
+        <!-- Header -->
+        <div class="text-center mb-6 pt-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700">मराठी अलंकार टेस्ट सिरीज</h1>
+            <p class="text-gray-500 mt-1">Maha TET 2013 - 2024 मागील वर्षाचे प्रश्न</p>
+        </div>
 
-        <main id="quiz-container" class="bg-white p-6 sm:p-8 rounded-xl shadow-md space-y-8">
-            <!-- Questions will be dynamically inserted here -->
-        </main>
+        <!-- Quiz Content Area -->
+        <div id="quiz-content">
+            <div class="flex justify-between items-center mb-4">
+                <div id="question-counter" class="text-lg font-semibold text-blue-600"></div>
+                <div id="score-counter" class="text-lg font-semibold text-green-600"></div>
+            </div>
 
-        <div id="result-container" class="hidden mt-8 text-center">
-             <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">तुमचा निकाल</h2>
-                <p id="score" class="text-4xl font-bold text-blue-600 my-4"></p>
-                <p id="feedback" class="text-lg text-gray-600"></p>
-                <button onclick="window.location.reload()" class="mt-6 px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-transform transform hover:scale-105">
-                    पुन्हा प्रयत्न करा
-                </button>
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg mb-6">
+                <p id="question-year" class="text-sm text-blue-800 mb-2 font-medium"></p>
+                <p id="question-text" class="text-xl font-medium leading-relaxed"></p>
+            </div>
+
+            <div id="options-container" class="space-y-4">
+                <!-- Options will be dynamically inserted here -->
+            </div>
+
+            <div id="explanation-container" class="mt-6 hidden">
+                 <h3 class="font-bold text-lg mb-2 text-gray-700">स्पष्टीकरण:</h3>
+                 <div id="explanation-text" class="bg-gray-50 p-4 rounded-lg border text-gray-600 leading-loose"></div>
             </div>
         </div>
 
-         <div class="text-center mt-8">
-                <button id="submit-btn" class="px-10 py-4 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition-transform transform hover:scale-105">
-                    उत्तरे सबमिट करा
-                </button>
-            </div>
+        <!-- Result Screen -->
+        <div id="result-container" class="text-center hidden">
+             <h2 class="text-3xl font-bold text-green-600 mb-4">अभिनंदन! तुम्ही टेस्ट पूर्ण केली आहे.</h2>
+             <p class="text-2xl mb-2">तुमचा अंतिम स्कोर:</p>
+             <p id="final-score" class="text-5xl font-bold mb-6 text-blue-700"></p>
+             <div class="flex flex-col md:flex-row gap-4 justify-center">
+                 <button id="review-btn" class="w-full md:w-auto bg-yellow-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-yellow-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50">
+                     उत्तरे तपासा
+                 </button>
+                 <button id="retry-btn" class="w-full md:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                     पुन्हा प्रयत्न करा
+                 </button>
+             </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div id="navigation-buttons" class="mt-8 flex justify-between items-center">
+            <button id="prev-btn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition" disabled>मागे</button>
+            <button id="next-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition">पुढे</button>
+        </div>
 
     </div>
 
     <script>
         const quizData = [
             {
-                question: "1. '<u>तो</u> नेहमी खरे बोलतो.' या वाक्यातील अधोरेखित शब्दाची जात ओळखा.",
-                options: ["नाम", "सर्वनाम", "विशेषण", "क्रियापद"],
-                answer: "सर्वनाम"
+                question: "लहानपण देगा देवा | मुंगी साखरेचा रवा || या ओळीत कोणता अलंकार आहे?",
+                options: ["उत्प्रेक्षा", "दृष्टांत", "रूपक", "यमक"],
+                answer: "दृष्टांत",
+                year: "Maha TET 2013",
+                explanation: "दृष्टांत अलंकारात एखादे तत्त्व, विचार किंवा कल्पना पटवून देण्यासाठी तशाच अर्थाचा एखादा દાખલા किंवा उदाहरण दिले जाते. इथे लहानपणाचे महत्त्व पटवून देण्यासाठी मुंगीला मिळणाऱ्या साखरेच्या रव्याचे उदाहरण दिले आहे."
             },
             {
-                question: "2. 'शहानपण' हे कोणत्या प्रकारचे नाम आहे?",
-                options: ["सामान्यनाम", "विशेषनाम", "भाववाचक नाम", "समूहवाचक नाम"],
-                answer: "भाववाचक नाम"
+                question: "आभाळागत माया तुझी आम्हांवरी राहू दे! - या वाक्यातील अलंकार ओळखा.",
+                options: ["उपमा", "उत्प्रेक्षा", "रूपक", "श्लेष"],
+                answer: "उपमा",
+                year: "Maha TET 2014",
+                explanation: "येथे 'आभाळागत' या शब्दात 'गत' हा साधर्म्यसूचक शब्द वापरून मायेची तुलना आभाळाशी केली आहे. जेव्हा दोन वस्तूंमधील साम्य चमत्कृतिपूर्ण रीतीने वर्णन केलेले असते, तेव्हा उपमा अलंकार होतो."
             },
             {
-                question: "3. 'अरेरे! खूप वाईट झाले.' या वाक्यातील 'अरेरे!' हा शब्द कोणता अव्यय आहे?",
-                options: ["क्रियाविशेषण अव्यय", "शब्दयोगी अव्यय", "उभयान्वयी अव्यय", "केवलप्रयोगी अव्यय"],
-                answer: "केवलप्रयोगी अव्यय"
-            },
-            {
-                question: "4. '<u>मुलांनो</u>, शांत बसा.' या वाक्यातील अधोरेखित शब्द नामाच्या कोणत्या प्रकारात येतो?",
-                options: ["विशेषनाम", "भाववाचक नाम", "सामान्यनाम", "समूहवाचक नाम"],
-                answer: "सामान्यनाम"
-            },
-            {
-                question: "5. '<u>मी</u> स्वतः त्याला पाहिले.' अधोरेखित शब्द कोणत्या प्रकारचे सर्वनाम आहे?",
-                options: ["पुरुषवाचक", "दर्शक", "आत्मवाचक", "प्रश्नार्थक"],
-                answer: "आत्मवाचक"
-            },
-            {
-                question: "6. 'त्याचा चेहरा <u>कमलासारखा</u> तेजस्वी आहे.' यातील अधोरेखित शब्दाची जात ओळखा.",
-                options: ["नाम", "सर्वनाम", "विशेषण", "क्रियाविशेषण"],
-                answer: "विशेषण"
-            },
-            {
-                question: "7. 'तो <u>हळूहळू</u> चालतो.' या वाक्यातील अधोरेखित शब्द कोणता आहे?",
-                options: ["क्रियापद", "विशेषण", "क्रियाविशेषण अव्यय", "शब्दयोगी अव्यय"],
-                answer: "क्रियाविशेषण अव्यय"
-            },
-            {
-                question: "8. 'आईने मुलाला <u>मारले</u>.' वाक्यातील अधोरेखित शब्द ओळखा.",
-                options: ["नाम", "सर्वनाम", "विशेषण", "क्रियापद"],
-                answer: "क्रियापद"
-            },
-            {
-                question: "9. '<u>आरती</u> रोज शाळेत जाते.' अधोरेखित शब्दाचा प्रकार ओळखा.",
-                options: ["सामान्यनाम", "विशेषनाम", "भाववाचक नाम", "धातुसाधित नाम"],
-                answer: "विशेषनाम"
-            },
-            {
-                question: "10. 'टेबला<u>वर</u> पुस्तक आहे.' अधोरेखित शब्दाचा अव्यय प्रकार ओळखा.",
-                options: ["क्रियाविशेषण अव्यय", "शब्दयोगी अव्यय", "उभयान्वयी अव्यय", "केवलप्रयोगी अव्यय"],
-                answer: "शब्दयोगी अव्यय"
+                question: "तो आला, त्याने पाहिले आणि तो जिंकला. - या वाक्यात कोणता अलंकार आहे?",
+                options: ["अतिशयोक्ती", "व्यतिरेक", "स्वभावोक्ती", "अनुप्रास"],
+                answer: "स्वभावोक्ती",
+                year: "Maha TET 2015",
+                explanation: "स्वभावोक्ती अलंकारात एखाद्या व्यक्तीचे, वस्तूचे किंवा प्रसंगाचे स्वाभाविक आणि जसे आहे तसे वर्णन केले जाते. इथे क्रियांचा क्रम स्वाभाविकपणे वर्णन केला आहे."
             },
              {
-                question: "11. 'जो प्रयत्न करतो, <u>तो</u> यशस्वी होतो.' या वाक्यातील अधोरेखित सर्वनामाचा प्रकार कोणता?",
-                options: ["संबंधी सर्वनाम", "दर्शक सर्वनाम", "प्रश्नार्थक सर्वनाम", "पुरुषवाचक सर्वनाम"],
-                answer: "दर्शक सर्वनाम"
+                question: "'श्रीकृष्ण नवरा मी नवरी | शिशुपाल नवरा मी न-वरी ||' - या काव्यपंक्तीतील अलंकार ओळखा.",
+                options: ["यमक", "अनुप्रास", "श्लेष", "रूपक"],
+                answer: "श्लेष",
+                year: "Maha TET 2016",
+                explanation: "श्लेष अलंकारात एकच शब्द वाक्यात दोन वेगवेगळ्या अर्थांनी वापरला जातो. इथे 'नवरी' हा शब्द दुसऱ्यांदा 'न-वरी' (मी त्याला वरणार नाही) या अर्थाने वापरला आहे, ज्यामुळे वाक्यात चमत्कृती निर्माण होते."
             },
             {
-                question: "12. '<u>वा!</u> काय सुंदर देखावा आहे.' या वाक्यातील अधोरेखित शब्दाची जात ओळखा.",
-                options: ["उभयान्वयी अव्यय", "क्रियाविशेषण अव्यय", "केवलप्रयोगी अव्यय", "शब्दयोगी अव्यय"],
-                answer: "केवलप्रयोगी अव्यय"
+                question: "'हा आंबा जणू साखरच!' या वाक्यातील अलंकार कोणता?",
+                options: ["रूपक", "उपमा", "उत्प्रेक्षा", "व्यतिरेक"],
+                answer: "उत्प्रेक्षा",
+                year: "Maha TET 2017",
+                explanation: "उत्प्रेक्षा अलंकारात उपमेय हे जणू उपमानच आहे, अशी कल्पना केलेली असते. येथे 'जणू', 'गमे', 'वाटे', 'भासे' यांसारखे शब्द वापरले जातात. या वाक्यात 'जणू' हा शब्द आल्याने उत्प्रेक्षा अलंकार होतो."
             },
             {
-                question: "13. '<u>गोडी</u>' या शब्दाची जात ओळखा.",
-                options: ["विशेषण", "भाववाचक नाम", "सामान्यनाम", "क्रियापद"],
-                answer: "भाववाचक नाम"
+                question: "'गडद निळे गडद निळे जलद भरुनी आले, शीतल तनु चपल चरण अनिलगण निघाले.' या ओळीत कोणत्या अलंकाराचा वापर झाला आहे?",
+                options: ["यमक", "अनुप्रास", "उपमा", "श्लेष"],
+                answer: "अनुप्रास",
+                year: "Maha TET 2018",
+                explanation: "अनुप्रास अलंकारात वाक्यात एकाच अक्षराची पुनरावृत्ती होऊन नादमाधुर्य निर्माण होते. इथे 'गडद निळे' या शब्दांची आणि 'ल' या अक्षराची पुनरावृत्ती झालेली दिसते."
             },
             {
-                question: "14. 'विद्यर्थ्यांनी अभ्यास करावा <u>कारण</u> परीक्षा जवळ आली आहे.' अधोरेखित शब्द कोणता अव्यय आहे?",
-                options: ["परिणामबोधक उभयान्वयी", "कारणबोधक उभयान्वयी", "स्वरूपबोधक उभयान्वयी", "उद्देशबोधक उभयान्वयी"],
-                answer: "कारणबोधक उभयान्वयी"
+                question: "'आईसारखे दैवत سाऱ्या जगतावर नाही.' या वाक्यात कोणता अलंकार आहे?",
+                options: ["अनन्वय", "रूपक", "व्यतिरेक", "उपमा"],
+                answer: "व्यतिरेक",
+                year: "Maha TET 2019",
+                explanation: "व्यतिरेक अलंकारात उपमेय हे उपमानापेक्षा श्रेष्ठ दाखवले जाते. इथे 'आई' (उपमेय) हे 'दैवत' (उपमान) पेक्षा श्रेष्ठ आहे असे सांगितले आहे, म्हणून व्यतिरेक अलंकार होतो."
             },
             {
-                question: "15. '<u>आमची</u> शाळा खूप मोठी आहे.' यातील अधोरेखित शब्द कोणत्या प्रकारचा आहे?",
-                options: ["नाम", "सार्वनामिक विशेषण", "गुणविशेषण", "संख्याविशेषण"],
-                answer: "सार्वनामिक विशेषण"
+                question: "जेव्हा उपमेयाला दुसऱ्या कशाचीच उपमा देता येत नाही, तेव्हा कोणता अलंकार होतो?",
+                options: ["व्यतिरेक", "अनन्वय", "ससंदेह", "अपन्हुती"],
+                answer: "अनन्वय",
+                year: "Maha TET 2020",
+                explanation: "अनन्वय अलंकारात उपमेयाला योग्य उपमान मिळत नसल्यामुळे, उपमेय हे उपमेयासारखेच आहे, असे सांगितले जाते. उदा. 'आहे ताजमहाल एक जगती तो तोच त्याच्यापरी'."
             },
             {
-                question: "16. '<u>देवघर</u>' हा कोणत्या प्रकारचा शब्द आहे?",
-                options: ["भाववाचक नाम", "सामान्यनाम", "विशेषनाम", "समूहवाचक नाम"],
-                answer: "सामान्यनाम"
+                question: "'ताठ मानेने जगावे' या वाक्यात कोणत्या प्रकारचा अलंकार आहे?",
+                options: ["अतिशयोक्ती", "रूपक", "चेतनगुणोक्ती", "अर्थान्तरन्यास"],
+                answer: "रूपक",
+                year: "Maha TET 2021",
+                explanation: "रूपक अलंकारात उपमेय आणि उपमान यांच्यात भेद नसून ते एकरूप आहेत, असे दर्शवले जाते. येथे 'मान' (उपमेय) आणि 'ताठपणा' (उपमान) हे एकरूप दाखवले आहेत."
             },
             {
-                question: "17. '<u>कोण</u> आले होते?' या वाक्यात 'कोण' हे सर्वनाम कोणत्या प्रकारचे आहे?",
-                options: ["आत्मवाचक", "संबंधी", "दर्शक", "प्रश्नार्थक"],
-                answer: "प्रश्नार्थक"
+                question: "'ती गुलाबी उषा म्हणजे परमेश्वराचे प्रेमच जणू.' या वाक्यातील अलंकार ओळखा.",
+                options: ["रूपक", "उत्प्रेक्षा", "उपमा", "श्लेष"],
+                answer: "उत्प्रेक्षा",
+                year: "Maha TET 2022",
+                explanation: "या वाक्यात 'जणू' हा शब्द वापरून गुलाबी उषा (उपमेय) ही परमेश्वराचे प्रेम (उपमान) असल्यासारखी कल्पना केली आहे. म्हणून, येथे उत्प्रेक्षा अलंकार आहे."
             },
             {
-                question: "18. '<u>पूर्वी</u> शिक्षक पगडी घालत असत.' अधोरेखित शब्द कोणत्या प्रकारचा आहे?",
-                options: ["कालवाचक क्रियाविशेषण", "स्थलवाचक क्रियाविशेषण", "रीतिवाचक क्रियाविशेषण", "नाम"],
-                answer: "कालवाचक क्रियाविशेषण"
+                question: "'सुसंगति सदा घडो, सुजनवाक्य कानी पडो' - या चरणात कोणता अलंकार आढळतो?",
+                options: ["अनुप्रास", "यमक", "श्लेष", "रूपक"],
+                answer: "यमक",
+                year: "Maha TET 2013",
+                explanation: "यमक अलंकारात कवितेच्या चरणाच्या शेवटी, मध्ये किंवा ठराविक ठिकाणी एक किंवा अधिक अक्षरे वेगवेगळ्या अर्थाने आल्यास नादमाधुर्य निर्माण होते. इथे 'घडो' आणि 'पडो' या शब्दांमुळे यमक साधला आहे."
             },
             {
-                question: "19. 'आई मुलाला हसविते.' या वाक्यातील क्रियापदाचा प्रकार ओळखा.",
-                options: ["शक्य क्रियापद", "प्रयोजक क्रियापद", "अकर्मक क्रियापद", "सकर्मक क्रियापद"],
-                answer: "प्रयोजक क्रियापद"
+                question: "'न हे नयन, पाकळ्या उमलल्या सरोजातिल' - अलंकार ओळखा.",
+                options: ["रूपक", "अपन्हुती", "उत्प्रेक्षा", "अतिशयोक्ती"],
+                answer: "अपन्हुती",
+                year: "Maha TET 2014",
+                explanation: "अपन्हुती अलंकारात उपमेयाचा निषेध करून ते उपमानच आहे, असे सांगितले जाते. इथे 'हे डोळे नाहीत, तर कमळाच्या पाकळ्या आहेत' असे सांगून उपमेयाला (नयन) लपवून उपमानाला (पाकळ्या) महत्त्व दिले आहे."
             },
             {
-                question: "20. '<u>चोर</u> पोलिसांना पाहून पळाला.' अधोरेखित शब्दाची जात सांगा.",
-                options: ["विशेषनाम", "भाववाचक नाम", "सामान्यनाम", "सर्वनाम"],
-                answer: "सामान्यनाम"
+                question: "'जो अंबरी उफळता खुर लागलाहे | तो चंद्रमा निज तनुवरी डाग लाहे ||' यात कोणता अलंकार आहे?",
+                options: ["रूपक", "व्यतिरेक", "अतिशयोक्ती", "दृष्टांत"],
+                answer: "अतिशयोक्ती",
+                year: "Maha TET 2015",
+                explanation: "अतिशयोक्ती अलंकारात एखादी कल्पना आहे त्यापेक्षा खूप फुगवून सांगितलेली असते. घोड्याच्या उफाळण्याने त्याचा खूर चंद्राला लागला आणि चंद्रावर डाग पडला, ही कल्पना असंभवनीय आणि अतिशयोक्त आहे."
             },
             {
-                question: "21. खालीलपैकी 'भाववाचक नाम' नसलेला शब्द कोणता?",
-                options: ["माधुर्य", "शौर्य", "सुंदर", "नम्रता"],
-                answer: "सुंदर"
+                question: "'सावळाच रंग तुझा पावसाळी नभापरी' - या वाक्यातील अलंकार ओळखा.",
+                options: ["उत्प्रेक्षा", "रूपक", "व्यतिरेק", "उपमा"],
+                answer: "उपमा",
+                year: "Maha TET 2016",
+                explanation: "येथे 'परी' हा साधर्म्यवाचक शब्द वापरून 'तुझ्या रंगाची' (उपमेय) तुलना 'पावसाळी नभाशी' (उपमान) केली आहे. त्यामुळे येथे उपमा अलंकार होतो."
             },
             {
-                question: "22. '<u>माझ्या</u> घरासमोर एक बाग आहे.' अधोरेखित शब्द कोणत्या प्रकारचा आहे?",
-                options: ["क्रियाविशेषण अव्यय", "उभयान्वयी अव्यय", "केवलप्रयोगी अव्यय", "शब्दयोगी अव्यय"],
-                answer: "शब्दयोगी अव्यय"
+                question: "'मरणात खरोखर जग जगते' - या ओळीत कोणता अलंकार आहे?",
+                options: ["विरोधाभास", "यमक", "श्लेष", "रूपक"],
+                answer: "विरोधाभास",
+                year: "Maha TET 2017",
+                explanation: "विरोधाभास अलंकारात वरवरचा विरोध दिसतो पण वास्तविक तसा विरोध नसतो. 'मरण' आणि 'जगणे' या वरवर विरोधी दिसणाऱ्या कल्पना एकत्र आणून एक गहन अर्थ सांगितला आहे. उदा. देशासाठी मरण पावलेले हुतात्मे जगात अमर होतात."
             },
             {
-                question: "23. '<u>ती</u> मुलगी सुंदर गाते.' अधोरेखित शब्द विशेषणाच्या कोणत्या प्रकारात येतो?",
-                options: ["गुणवाचक", "संख्यावाचक", "सार्वनामिक", "अनिश्चित"],
-                answer: "सार्वनामिक"
+                question: "'पिले सारंगाची झेपावत होती, जणू काही बाण सुटत होते.' - अलंकार ओळखा.",
+                options: ["उपमा", "उत्प्रेक्षा", "रूपक", "अतिशयोक्ती"],
+                answer: "उत्प्रेक्षा",
+                year: "Maha TET 2018",
+                explanation: "या वाक्यात 'जणू' या शब्दाचा वापर करून सारंगाच्या पिलांची (उपमेय) झेप ही सुटणाऱ्या बाणांसारखी (उपमान) आहे अशी कल्पना केली आहे. म्हणून येथे उत्प्रेक्षा अलंकार आहे."
             },
             {
-                question: "24. 'तो <u>वर</u> चढला.' यातील 'वर' शब्दाची जात कोणती?",
-                options: ["नाम", "क्रियाविशेषण", "शब्दयोगी अव्यय", "उभयान्वयी अव्यय"],
-                answer: "क्रियाविशेषण"
+                question: "'बोलता बोलता विचार बदलतात' - या वाक्यातील अलंकार ओळखा.",
+                options: ["अनुप्रास", "यमक", "स्वभावोक्ती", "अर्थान्तरन्यास"],
+                answer: "स्वभावोक्ती",
+                year: "Maha TET 2019",
+                explanation: "या वाक्यात मानवी स्वभावाचे किंवा एखाद्या क्रियेचे स्वाभाविक वर्णन केलेले आहे. यात कोणतीही अतिशयोक्ती किंवा कल्पना नाही, म्हणून हा स्वभावोक्ती अलंकार आहे."
             },
             {
-                question: "25. 'पक्षी झाडा<u>वर</u> बसला.' यातील 'वर' शब्दाची जात कोणती?",
-                options: ["नाम", "क्रियाविशेषण", "शब्दयोगी अव्यय", "उभयान्वयी अव्यय"],
-                answer: "शब्दयोगी अव्यय"
+                question: "'कठीण समय येता कोण कामास येतो?' - या वाक्यात कोणता अलंकार आहे?",
+                options: ["प्रश्न", "यमक", "चेतनगुणोक्ती", "ससंदेह"],
+                answer: "प्रश्न",
+                year: "Maha TET 2020",
+                explanation: "जेव्हा वाक्यात प्रश्न विचारलेला असतो, परंतु त्याचे उत्तर अपेक्षित नसते, केवळ भावनेची तीव्रता वाढवण्यासाठी प्रश्न विचारला जातो, तेव्हा प्रश्न अलंकार होतो."
             },
             {
-                question: "26. 'मला <u>थंडी</u> वाजते.' अधोरेखित शब्दाची जात कोणती?",
-                options: ["विशेषण", "भाववाचक नाम", "क्रियाविशेषण", "सामान्यनाम"],
-                answer: "भाववाचक नाम"
+                question: "निर्જીવ वस्तू सजीव आहेत असे मानून वर्णन केल्यास कोणता अलंकार होतो?",
+                options: ["रूपक", "उत्प्रेक्षा", "चेतनगुणोक्ती", "स्वभावोक्ती"],
+                answer: "चेतनगुणोक्ती",
+                year: "Maha TET 2021",
+                explanation: "चेतनगुणोक्ती अलंकारात निसर्गातील निर्जीव वस्तू सजीव प्राण्यांप्रमाणे किंवा माणसांप्रमाणे वागतात, अशी कल्पना केलेली असते. उदा. 'डोकी अलगद घरे उचलती काळोख्याच्या उशीवरूनी'."
             },
             {
-                question: "27. '<u>आम्ही</u> उद्या सहलीला जाऊ.' यातील सर्वनामाचा प्रकार ओळखा.",
-                options: ["प्रथम पुरुषवाचक", "द्वितीय पुरुषवाचक", "तृतीय पुरुषवाचक", "आत्मवाचक"],
-                answer: "प्रथम पुरुषवाचक"
-            },
-            {
-                question: "28. 'त्याने खरे सांगितले <u>म्हणून</u> तो वाचला.' अधोरेखित शब्दाचा प्रकार ओळखा.",
-                options: ["न्यूनत्वबोधक", "विकल्पबोधक", "परिणामबोधक", "समुच्चयबोधक"],
-                answer: "परिणामबोधक"
-            },
-            {
-                question: "29. '<u>पंधरा</u> रुपये' यातील 'पंधरा' हे कोणत्या प्रकारचे विशेषण आहे?",
-                options: ["गुणवाचक", "गणनावाचक संख्याविशेषण", "क्रमवाचक संख्याविशेषण", "सार्वनामिक"],
-                answer: "गणनावाचक संख्याविशेषण"
-            },
-            {
-                question: "30. '<u>त्याला</u> आता बसवते.' या वाक्यातील क्रियापदाचा प्रकार कोणता?",
-                options: ["प्रयोजक क्रियापद", "शक्य क्रियापद", "संयुक्त क्रियापद", "सिद्ध क्रियापद"],
-                answer: "शक्य क्रियापद"
+                question: "'एकच तारा हवा मजला, नकोत हे चंद्र-सूर्य' - या ओळीतील अलंकार ओळखा.",
+                options: ["व्यतिरेक", "अतिशयोक्ती", "विरोधाभास", "दृष्टांत"],
+                answer: "अतिशयोक्ती",
+                year: "Maha TET 2022",
+                explanation: "एका ताऱ्यासाठी चंद्र-सूर्य नाकारणे ही कल्पना असंभवनीय आणि फुगवून सांगितलेली आहे. त्यामुळे येथे अतिशयोक्ती अलंकार होतो."
             }
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
-        const submitBtn = document.getElementById('submit-btn');
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let isReviewMode = false;
+        let score = 0;
 
-        function loadQuiz() {
-            quizContainer.innerHTML = quizData.map((q, index) => `
-                <div class="question-block" id="question-${index}">
-                    <p class="font-semibold text-lg mb-4">${q.question}</p>
-                    <div class="options space-y-3">
-                        ${q.options.map(option => `
-                            <div>
-                                <input type="radio" name="question${index}" id="q${index}o${option}" value="${option}" class="hidden">
-                                <label for="q${index}o${option}" class="option-label">
-                                    ${option}
-                                </label>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-        }
+        const questionCounterEl = document.getElementById('question-counter');
+        const scoreCounterEl = document.getElementById('score-counter');
+        const questionYearEl = document.getElementById('question-year');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const explanationContainerEl = document.getElementById('explanation-container');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const quizContentEl = document.getElementById('quiz-content');
+        const resultContainerEl = document.getElementById('result-container');
+        const finalScoreEl = document.getElementById('final-score');
+        const retryBtn = document.getElementById('retry-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const navigationButtonsEl = document.getElementById('navigation-buttons');
 
-        function showResults() {
-            let score = 0;
-            quizData.forEach((q, index) => {
-                const questionBlock = document.getElementById(`question-${index}`);
-                const options = questionBlock.querySelectorAll('.option-label');
-                const selectedOptionInput = document.querySelector(`input[name="question${index}"]:checked`);
+        function loadQuestion(index) {
+            const question = quizData[index];
+            isReviewMode ? scoreCounterEl.classList.remove('hidden') : scoreCounterEl.classList.add('hidden');
+            explanationContainerEl.classList.add('hidden');
+            optionsContainerEl.innerHTML = '';
+            
+            questionCounterEl.textContent = `प्रश्न ${index + 1} / ${quizData.length}`;
+            questionYearEl.textContent = question.year;
+            questionTextEl.textContent = question.question;
+
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('w-full', 'text-left', 'p-4', 'rounded-lg', 'border-2', 'border-gray-300', 'option-btn', 'text-lg');
+                button.dataset.option = option;
                 
-                // Disable all radio buttons
-                document.querySelectorAll(`input[name="question${index}"]`).forEach(input => {
-                    input.disabled = true;
-                });
-
-                if (selectedOptionInput) {
-                    const selectedLabel = selectedOptionInput.nextElementSibling;
-                    if (selectedOptionInput.value === q.answer) {
-                        score++;
-                        selectedLabel.classList.add('correct-answer');
-                    } else {
-                        selectedLabel.classList.add('wrong-answer');
-                        // Highlight the correct answer
-                        options.forEach(optLabel => {
-                            if (optLabel.textContent.trim() === q.answer) {
-                                optLabel.classList.add('correct-answer');
-                            }
-                        });
+                if (isReviewMode) {
+                    button.disabled = true;
+                    const userAnswer = userAnswers[index];
+                    if (option === question.answer) {
+                        button.classList.add('correct');
+                    } else if (option === userAnswer) {
+                        button.classList.add('incorrect');
                     }
                 } else {
-                    // If no option is selected, just highlight the correct one
-                    options.forEach(optLabel => {
-                        if (optLabel.textContent.trim() === q.answer) {
-                            optLabel.classList.add('correct-answer');
-                        }
-                    });
+                    if (option === userAnswers[index]) {
+                         button.classList.add('selected');
+                    }
+                    button.onclick = () => selectOption(button);
                 }
+
+                optionsContainerEl.appendChild(button);
             });
 
-            const resultContainer = document.getElementById('result-container');
-            const scoreElement = document.getElementById('score');
-            const feedbackElement = document.getElementById('feedback');
-            
-            scoreElement.textContent = `${score} / ${quizData.length}`;
-            
-            let feedback = '';
-            const percentage = (score / quizData.length) * 100;
-            if (percentage >= 80) {
-                feedback = 'उत्तम कामगिरी! तुमचा अभ्यास योग्य दिशेने चालू आहे.';
-            } else if (percentage >= 60) {
-                feedback = 'चांगला प्रयत्न! अजून थोडा सराव आवश्यक आहे.';
-            } else {
-                feedback = 'तुम्ही अधिक सराव करण्याची गरज आहे. पुन्हा प्रयत्न करा.';
+            if (isReviewMode) {
+                explanationTextEl.textContent = question.explanation;
+                explanationContainerEl.classList.remove('hidden');
             }
-            feedbackElement.textContent = feedback;
-            
-            resultContainer.classList.remove('hidden');
-            submitBtn.classList.add('hidden');
-            window.scrollTo(0, 0); // Scroll to top to show results
+
+            updateNavigationButtons();
         }
 
-        function loadWatermarks() {
-            const grid = document.getElementById('watermark-grid');
-            const text = 'SUCCESS DIGITAL CLASSES';
-            // Create enough items to fill the oversized grid
-            for (let i = 0; i < 200; i++) { 
-                const item = document.createElement('div');
-                item.className = 'watermark-item';
-                item.textContent = text;
-                grid.appendChild(item);
-            }
+        function selectOption(selectedButton) {
+            if (isReviewMode) return;
+            const allOptions = optionsContainerEl.querySelectorAll('.option-btn');
+            allOptions.forEach(btn => btn.classList.remove('selected'));
+            selectedButton.classList.add('selected');
+            userAnswers[currentQuestionIndex] = selectedButton.dataset.option;
         }
-
-        submitBtn.addEventListener('click', showResults);
         
-        // Initialize the quiz on page load
-        window.onload = () => {
-            loadQuiz();
-            loadWatermarks();
-        };
+        function updateNavigationButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.textContent = isReviewMode ? 'निकाल पहा' : 'सबमिट करा';
+            } else {
+                nextBtn.textContent = 'पुढे';
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                if (isReviewMode) {
+                    showFinalResult();
+                } else {
+                    // Final submit
+                    calculateScore();
+                    showFinalResult();
+                }
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+
+        function calculateScore() {
+            score = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === quizData[index].answer) {
+                    score++;
+                }
+            });
+        }
+
+        function showFinalResult() {
+            quizContentEl.classList.add('hidden');
+            navigationButtonsEl.classList.add('hidden');
+            resultContainerEl.classList.remove('hidden');
+            finalScoreEl.textContent = `${score} / ${quizData.length}`;
+            scoreCounterEl.textContent = `स्कोर: ${score}`;
+        }
+        
+        reviewBtn.addEventListener('click', () => {
+            isReviewMode = true;
+            currentQuestionIndex = 0;
+            resultContainerEl.classList.add('hidden');
+            quizContentEl.classList.remove('hidden');
+            navigationButtonsEl.classList.remove('hidden');
+            loadQuestion(currentQuestionIndex);
+        });
+
+        retryBtn.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers.fill(null);
+            isReviewMode = false;
+            
+            resultContainerEl.classList.add('hidden');
+            quizContentEl.classList.remove('hidden');
+            navigationButtonsEl.classList.remove('hidden');
+            
+            loadQuestion(currentQuestionIndex);
+        });
+
+        // Initial Load
+        loadQuestion(currentQuestionIndex);
     </script>
+
 </body>
+
 </html>
+
