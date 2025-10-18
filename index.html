@@ -3,357 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maha TET PYQ चाचणी मालिका - सक्सेस डिजिटल क्लासेस</title>
+    <title>Maha TET PYQ Test Series - बालमानसशास्त्र</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
-            position: relative;
             background-color: #f0f4f8;
+            position: relative;
+            overflow-x: hidden;
         }
 
         /* Watermark Styling */
-        body::before {
-            content: 'सक्सेस डिजिटल क्लासेस';
+        .watermark-container {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 7vw;
-            font-weight: 700;
-            color: rgba(0, 0, 0, 0.04);
-            white-space: nowrap;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 100px;
+            overflow: hidden;
             z-index: 0;
             pointer-events: none;
         }
 
+        .watermark {
+            font-size: 18px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.06);
+            transform: rotate(-30deg);
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Ensure content is above the watermark */
         .content-wrapper {
             position: relative;
             z-index: 1;
         }
         
-        .question-card {
-            border-left: 5px solid #10b981; /* Emerald-500 */
-        }
-
-        .option-label {
-            transition: all 0.2s ease-in-out;
-        }
-
-        .option-label:hover {
-            background-color: #d1fae5; /* Emerald-100 */
-        }
-        
-        input[type="radio"]:checked + .option-label {
-            background-color: #a7f3d0; /* Emerald-200 */
-            border-color: #10b981; /* Emerald-500 */
+        /* Custom radio button appearance */
+        input[type="radio"]:checked + label {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-weight: 600;
         }
         
         .correct-answer {
-            background-color: #d1fae5 !important; /* Green for correct */
-            border: 2px solid #10b981;
+            border-color: #16a34a !important;
+            background-color: #dcfce7 !important;
+            color: #15803d !important;
         }
-
-        .incorrect-answer {
-            background-color: #fee2e2 !important; /* Red for incorrect */
-            border: 2px solid #ef4444;
+        
+        .wrong-answer {
+            border-color: #dc2626 !important;
+            background-color: #fee2e2 !important;
+            color: #b91c1c !important;
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-slate-100">
 
-    <div class="content-wrapper">
-        <header class="bg-white shadow-md p-4">
-            <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-800">Maha TET PYQ चाचणी मालिका</h1>
-                <h2 class="text-lg font-semibold text-emerald-600">सक्सेस डिजिटल क्लासेस</h2>
-            </div>
+    <!-- Watermark Background -->
+    <div class="watermark-container">
+        <script>
+            for (let i = 0; i < 50; i++) {
+                document.write('<div class="watermark">SUCCESS DIGITAL CLASSES</div>');
+            }
+        </script>
+    </div>
+
+    <div class="content-wrapper container mx-auto p-4 sm:p-6 md:p-8">
+        <header class="text-center mb-8 bg-white p-6 rounded-xl shadow-md">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800">Maha TET - बालमानसशास्त्र PYQ</h1>
+            <p class="text-md text-slate-600 mt-2">मागील वर्षांच्या प्रश्नांचा सरावसंच (2013-2024)</p>
+            <p class="text-sm font-semibold text-blue-600 mt-2">SUCCESS DIGITAL CLASSES</p>
         </header>
 
-        <main class="container mx-auto p-4 md:p-8">
-            <div id="quiz-container">
-                <!-- Questions will be dynamically inserted here -->
-            </div>
-
-            <div class="text-center mt-8">
-                <button id="submit-btn" class="bg-emerald-600 text-white font-bold py-3 px-12 rounded-lg hover:bg-emerald-700 transition-transform transform hover:scale-105 shadow-lg">
-                    चाचणी सबमिट करा
-                </button>
-            </div>
-            
-            <div id="results-container" class="hidden mt-8">
-                 <div class="bg-white p-8 rounded-xl shadow-2xl text-center">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">चाचणी पूर्ण झाली!</h2>
-                    <p class="text-gray-600 mb-6">तुमचा निकाल खालीलप्रमाणे आहे:</p>
-                    <div id="score" class="text-6xl font-extrabold text-emerald-600 mb-6"></div>
-                    <p id="score-message" class="text-xl font-medium text-gray-700 mb-8"></p>
-                    <button id="restart-btn" class="bg-gray-700 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-800 transition duration-300">
-                        पुन्हा प्रयत्न करा
-                    </button>
-                </div>
-
-                <div class="mt-10">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">तुमच्या उत्तरांचे पुनरावलोकन करा</h3>
-                    <div id="review-section" class="space-y-6">
-                        <!-- Review details will be dynamically inserted here -->
-                    </div>
-                </div>
-            </div>
+        <main id="quiz-container" class="space-y-6">
+            <!-- Questions will be dynamically inserted here -->
         </main>
+
+        <div id="result-container" class="text-center my-8 p-8 bg-white rounded-xl shadow-lg hidden">
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">निकाल</h2>
+            <p id="score" class="text-5xl font-bold text-blue-600"></p>
+            <p id="feedback" class="text-lg text-slate-600 mt-2"></p>
+        </div>
+
+        <div class="text-center mt-8">
+            <button id="submit-btn" class="bg-blue-600 text-white font-bold py-3 px-10 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
+                Submit Test
+            </button>
+        </div>
     </div>
 
     <script>
-        const quizContainer = document.getElementById('quiz-container');
-        const submitButton = document.getElementById('submit-btn');
-        const resultsContainer = document.getElementById('results-container');
-        const scoreElement = document.getElementById('score');
-        const scoreMessageElement = document.getElementById('score-message');
-        const reviewSection = document.getElementById('review-section');
-        const restartButton = document.getElementById('restart-btn');
-
-        // सर्व प्रश्न डेटा या अॅरेमध्ये ऑफलाइन संग्रहित आहे
-        const questions = [
+        const quizData = [
             {
-                year: 2013,
-                question: `पियाजेच्या संज्ञानात्मक विकासाच्या सिद्धांतानुसार, औपचारिक कार्यात्मक अवस्था (Formal Operational Stage) कोणत्या वयात सुरू होते?`,
-                options: ["जन्मापासून २ वर्षांपर्यंत", "२ ते ७ वर्षे", "७ ते ११ वर्षे", "११ वर्षे आणि पुढे"],
-                answer: "११ वर्षे आणि पुढे",
-                explanation: `पियाजेची चौथी आणि अंतिम अवस्था, औपचारिक कार्यात्मक अवस्था, सुमारे ११ व्या वर्षी सुरू होते आणि प्रौढत्वापर्यंत चालू राहते. अमूर्तपणे विचार करण्याची आणि तार्किकपणे तर्क करण्याची क्षमता हे या अवस्थेचे वैशिष्ट्य आहे.`
+                question: "पियाजेच्या मते, बालकाच्या बौद्धिक विकासातील 'मूर्त क्रिया अवस्था' कोणत्या वयोगटात येते?",
+                year: "2013",
+                options: ["जन्म ते २ वर्षे", "२ ते ७ वर्षे", "७ ते ११ वर्षे", "११ वर्षांपुढे"],
+                correct: 2,
+                explanation: "पियाजेच्या बौद्धिक विकासाच्या सिद्धांतानुसार, मूर्त क्रिया अवस्था (Concrete Operational Stage) ७ ते ११ वर्षे वयोगटात येते. या अवस्थेत बालक तर्कशुद्ध विचार करू लागतो, परंतु तो विचार मूर्त वस्तू आणि घटनांपुरता मर्यादित असतो."
             },
             {
-                year: 2014,
-                question: `खालीलपैकी कोणते आंतरिक प्रेरणेचे (intrinsic motivation) उदाहरण आहे?`,
-                options: ["चांगले गुण मिळवणे", "आनंदासाठी कोडे सोडवणे", "शिक्षकाकडून प्रशंसा मिळवणे", "रोख बक्षीस जिंकणे"],
-                answer: "आनंदासाठी कोडे सोडवणे",
-                explanation: `आंतरिक प्रेरणेमध्ये एखाद्या परिणामासाठी नव्हे, तर त्याच्या मूळ समाधानासाठी एखादी कृती करणे समाविष्ट असते. कोडे सोडवण्याच्या प्रक्रियेचा आनंद घेणे हे त्याचे उत्तम उदाहरण आहे.`
+                question: "अध्ययन संक्रमण (Transfer of Learning) म्हणजे काय?",
+                year: "2014",
+                options: ["नवीन माहिती विसरणे", "एका परिस्थितीत शिकलेले ज्ञान दुसऱ्या परिस्थितीत वापरणे", "शिकण्याची प्रक्रिया थांबवणे", "ज्ञानाची पुनरावृत्ती करणे"],
+                correct: 1,
+                explanation: "अध्ययन संक्रमण म्हणजे एका परिस्थितीत मिळवलेले ज्ञान, कौशल्ये किंवा सवयी दुसऱ्या नवीन परिस्थितीत वापरण्याची क्षमता. हे सकारात्मक, नकारात्मक किंवा शून्य असू शकते."
             },
             {
-                year: 2015,
-                question: `'शिक्षण हक्क कायदा, २००९' नुसार कोणत्या वयोगटातील मुलांसाठी सक्तीचे शिक्षण निर्दिष्ट केले आहे?`,
-                options: ["३ ते १० वर्षे", "६ ते १४ वर्षे", "५ ते १२ वर्षे", "७ ते १५ वर्षे"],
-                answer: "६ ते १४ वर्षे",
-                explanation: `मुलांचा मोफत आणि सक्तीच्या शिक्षणाचा हक्क (RTE) कायदा, २००९, सहा ते चौदा वर्षे वयोगटातील सर्व मुलांना जवळच्या शाळेत मोफत आणि सक्तीचे शिक्षण देण्याचे बंधन घालतो.`
+                question: "खालीलपैकी कोणता घटक व्यक्तिमत्त्व विकासावर परिणाम करत नाही?",
+                year: "2015",
+                options: ["आनुवंशिकता", "पर्यावरण", "शारीरिक उंची", "कुटुंब"],
+                correct: 2,
+                explanation: "आनुवंशिकता, पर्यावरण आणि कुटुंब हे व्यक्तिमत्व विकासावर थेट परिणाम करतात. शारीरिक उंची हा शारीरिक गुणधर्म आहे, परंतु तो व्यक्तिमत्त्व विकासाचा थेट निर्धारक घटक मानला जात नाही."
             },
             {
-                year: 2016,
-                question: `खालीलपैकी कोणते बाल विकासाचे तत्व नाही?`,
-                options: ["विकास क्रमबद्ध असतो", "विकास सर्वांसाठी सारखा असतो", "विकास सामान्यकडून विशिष्टकडे जातो", "विकास ही एक सतत चालणारी प्रक्रिया आहे"],
-                answer: "विकास सर्वांसाठी सारखा असतो",
-                explanation: `विकास हा अंदाजित नमुन्यांनुसार होत असला तरी, अनुवांशिकता आणि वातावरणातील वैयक्तिक फरकांमुळे विकासाचा दर आणि नेमके स्वरूप प्रत्येक मुलामध्ये वेगवेगळे असते. त्यामुळे तो सर्वांसाठी सारखा नसतो.`
-            },
-             {
-                year: 2017,
-                question: `भाषेच्या संदर्भात, 'मॉर्फिम' (morpheme) म्हणजे काय?`,
-                options: ["ध्वनीचे सर्वात लहान एकक", "व्याकरणाचा नियम", "अर्थाचे सर्वात लहान एकक", "वाक्याचा एक प्रकार"],
-                answer: "अर्थाचे सर्वात लहान एकक",
-                explanation: `मॉर्फिम हे भाषेतील सर्वात लहान एकक आहे ज्याला अर्थ असतो. तो एक संपूर्ण शब्द (उदा. 'मांजर') किंवा शब्दाचा भाग (उदा. 'मांजरे' मधील '-रे') असू शकतो.`
+                question: "बुद्धिमत्तेचा 'द्विघटक सिद्धांत' (Two-factor theory) कोणी मांडला?",
+                year: "2016",
+                options: ["अल्फ्रेड बिने", "थर्स्टन", "गार्डनर", "स्पिअरमन"],
+                correct: 3,
+                explanation: "चार्ल्स स्पिअरमन यांनी बुद्धिमत्तेचा द्विघटक सिद्धांत मांडला. त्यांच्या मते, बुद्धिमत्तेमध्ये एक सामान्य घटक ('g' factor) आणि अनेक विशिष्ट घटक ('s' factors) असतात."
             },
             {
-                year: 2018,
-                question: `वायगॉटस्कीचा सिद्धांत विकासात _________ च्या महत्त्वावर जोर देतो.`,
-                options: ["परिपक्वता", "सामाजिक संवाद", "सशक्तीकरण", "अनुवांशिक घटक"],
-                answer: "सामाजिक संवाद",
-                explanation: `लेव्ह वायगॉटस्कीचा सामाजिक-सांस्कृतिक सिद्धांत ज्ञानाच्या विकासात सामाजिक संवादाच्या मूलभूत भूमिकेवर प्रकाश टाकतो. त्यांचा विश्वास होता की 'अर्थ निर्माण' करण्याच्या प्रक्रियेत समाजाची मध्यवर्ती भूमिका असते.`
+                question: "एखाद्या वस्तू, व्यक्ती किंवा घटनेबद्दलची आवड किंवा नावड म्हणजे काय?",
+                year: "2017",
+                options: ["अभिवृत्ती (Attitude)", "अभियोग्यता (Aptitude)", "बुद्धी (Intelligence)", "सवय (Habit)"],
+                correct: 0,
+                explanation: "अभिवृत्ती म्हणजे एखाद्या विशिष्ट वस्तू, व्यक्ती, कल्पना किंवा परिस्थितीबद्दल सकारात्मक किंवा नकारात्मक भावनांची प्रवृत्ती. ती व्यक्तीच्या आवडी-निवडी दर्शवते."
             },
             {
-                year: 2019,
-                question: `रचनात्मक मूल्यांकनाचा (formative assessment) प्राथमिक उद्देश काय आहे?`,
-                options: ["विद्यार्थ्यांना क्रम देणे", "सत्राच्या शेवटी श्रेणी देणे", "विद्यार्थ्यांच्या शिक्षणावर लक्ष ठेवणे आणि सतत अभिप्राय देणे", "विद्यार्थ्यांची क्षमता प्रमाणित करणे"],
-                answer: "विद्यार्थ्यांच्या शिक्षणावर लक्ष ठेवणे आणि सतत अभिप्राय देणे",
-                explanation: `रचनात्मक मूल्यांकन म्हणजे शिकण्याच्या प्रक्रियेदरम्यान शिक्षकांकडून आयोजित केलेल्या औपचारिक आणि अनौपचारिक मूल्यांकन प्रक्रियेची श्रेणी, जेणेकरून विद्यार्थ्यांची प्रगती सुधारण्यासाठी शिकवणे आणि शिकण्याच्या क्रियाकलापांमध्ये बदल करता येईल.`
+                question: "मास्लोच्या गरजांच्या श्रेणीबद्ध सिद्धांतानुसार (Hierarchy of Needs) सर्वात उच्च पातळीवरील गरज कोणती?",
+                year: "2018",
+                options: ["सुरक्षिततेची गरज", "सामाजिक गरज", "आत्म-वास्तविकीकरणाची गरज (Self-Actualization)", "शारीरिक गरज"],
+                correct: 2,
+                explanation: "अब्राहम मास्लोच्या सिद्धांतानुसार, आत्म-वास्तविकीकरण ही सर्वात उच्च पातळीवरील गरज आहे. यात व्यक्ती आपल्यातील सर्व क्षमता ओळखून स्वतःला सिद्ध करण्याचा प्रयत्न करते."
             },
             {
-                year: 2020,
-                question: `हॉवर्ड गार्डनरचा बहु-बुद्धिमत्तेचा सिद्धांत (theory of multiple intelligences) काय सांगतो?`,
-                options: ["बुद्धिमत्ता ही एकच, सामान्य क्षमता आहे", "बुद्धिमत्तेचे अनेक वेगळे प्रकार आहेत", "IQ चाचण्या बुद्धिमत्तेचे सर्वात विश्वसनीय माप आहेत", "बुद्धिमत्ता जन्मतःच निश्चित असते"],
-                answer: "बुद्धिमत्तेचे अनेक वेगळे प्रकार आहेत",
-                explanation: `गार्डनरने मांडले की लोक त्यांच्याकडे असलेल्या सर्व बुद्धिमत्तेसह जन्माला येत नाहीत. त्यांनी भाषिक, तार्किक-गणितीय, अवकाशीय, शारीरिक-क्रियात्मक, संगीतात्मक, आंतरवैयक्तिक, अंतर्वैयक्तिक आणि निसर्गवादी अशा आठ प्रकारच्या बुद्धिमत्ता ओळखल्या.`
+                question: "स्किनरने अध्ययनाच्या कोणत्या प्रकारावर जास्त भर दिला?",
+                year: "2019",
+                options: ["अभिजात अभिसंधान (Classical Conditioning)", "साधक अभिसंधान (Operant Conditioning)", "प्रयत्न-प्रमाद पद्धत (Trial and Error)", "अनुकरण (Imitation)"],
+                correct: 1,
+                explanation: "बी. एफ. स्किनर हे साधक अभिसंधान (Operant Conditioning) सिद्धांताचे जनक आहेत. त्यांच्या मते, वर्तनानंतर मिळणाऱ्या प्रबलनामुळे (Reinforcement) किंवा शिक्षेमुळे (Punishment) वर्तनात बदल होतो."
             },
             {
-                year: 2021,
-                question: `'ती शौर्याने लढली' या वाक्यात 'शौर्याने' हा शब्द कोणत्या प्रकारचा शब्द आहे?`,
-                options: ["विशेषण", "क्रियापद", "नाम", "क्रियाविशेषण"],
-                answer: "क्रियाविशेषण",
-                explanation: `क्रियाविशेषण हा एक शब्द आहे जो क्रियापद, विशेषण किंवा दुसऱ्या क्रियाविशेषणाचे वर्णन करतो. येथे, 'शौर्याने' हा शब्द 'लढली' या क्रियापदाचे वर्णन करतो, की ती कशी लढली.`
+                question: "कोहलबर्गचा नैतिक विकासाचा सिद्धांत कशाशी संबंधित आहे?",
+                year: "2021",
+                options: ["बौद्धिक विकास", "सामाजिक विकास", "भावनिक विकास", "नैतिक तर्क"],
+                correct: 3,
+                explanation: "लॉरेन्स कोहलबर्ग यांनी नैतिक विकासाचे टप्पे सांगितले आहेत, जे व्यक्तीच्या नैतिक तर्क करण्याच्या क्षमतेवर आधारित आहेत. त्यांचा सिद्धांत 'बरोबर' आणि 'चूक' याबद्दलच्या विचारांशी संबंधित आहे."
             },
             {
-                year: 2022,
-                question: `१२ आणि १८ चा लसावि (लघुत्तम सामाईक विभाज्य) किती आहे?`,
-                options: ["६", "२४", "३६", "७२"],
-                answer: "३६",
-                explanation: `१२ चे विभाज्य आहेत १२, २४, ३६, ४८... १८ चे विभाज्य आहेत १८, ३६, ५४... दोन्हीमध्ये सामाईक असलेली सर्वात लहान संख्या ३६ आहे.`
+                question: "सृजनशीलतेमध्ये (Creativity) खालीलपैकी कोणता घटक समाविष्ट नाही?",
+                year: "2014",
+                options: ["लवचिकता (Flexibility)", "प्रवाह (Fluency)", "अभिसारी विचार (Convergent Thinking)", "मौलिकता (Originality)"],
+                correct: 2,
+                explanation: "सृजनशीलतेमध्ये अपसारी विचार (Divergent Thinking) महत्त्वाचा असतो, ज्यात अनेक कल्पना येतात. अभिसारी विचार म्हणजे एकाच अचूक उत्तरावर लक्ष केंद्रित करणे, जो सृजनशीलतेचा भाग नाही. प्रवाह, लवचिकता आणि मौलिकता हे सृजनशीलतेचे मुख्य घटक आहेत."
             },
             {
-                year: 2023,
-                question: `डिस्लेक्सिया (dyslexia) असलेल्या व्यक्तीला कशामध्ये अडचण येते?`,
-                options: ["वाचन आणि स्पेलिंग", "गणितीय गणना", "सामाजिक संवाद", "शारीरिक समन्वय"],
-                answer: "वाचन आणि स्पेलिंग",
-                explanation: `डिस्लेक्सिया हा एक शिकण्याचा विकार आहे ज्यामध्ये ध्वनी ओळखण्यात आणि ते अक्षरे आणि शब्दांशी कसे संबंधित आहेत हे शिकण्यात समस्या असल्यामुळे वाचण्यात अडचण येते.`
+                question: "एखाद्या विद्यार्थ्याला गणित आवडत नसेल, तर हे कशाचे उदाहरण आहे?",
+                year: "2015",
+                options: ["सकारात्मक अभिवृत्ती", "नकारात्मक अभिवृत्ती", "शून्य अभिवृत्ती", "अभियोग्यता"],
+                correct: 1,
+                explanation: "गणित आवडत नसणे ही त्या विषयाबद्दलची नकारात्मक अभिवृत्ती (Negative Attitude) दर्शवते. अभिवृत्ती ही सकारात्मक, नकारात्मक किंवा तटस्थ असू शकते."
             },
             {
-                year: 2024,
-                question: `एक समावेशक वर्गात (inclusive classroom) शिक्षकाने काय केले पाहिजे?`,
-                options: ["क्षमतेनुसार विद्यार्थ्यांना वेगळे करणे", "फक्त हुशार मुलांवर लक्ष केंद्रित करणे", "सर्व विद्यार्थ्यांना विविध शिकण्याचे अनुभव देणे", "सर्वांना एकसारख्या सूचना देणे"],
-                answer: "सर्व विद्यार्थ्यांना विविध शिकण्याचे अनुभव देणे",
-                explanation: `समावेशकता म्हणजे सर्व विद्यार्थ्यांच्या विविध गरजा पूर्ण करणारे शिकण्याचे वातावरण तयार करणे. यासाठी विभेदित सूचना आणि विविध शिकवण्याच्या पद्धती आवश्यक आहेत जेणेकरून प्रत्येकजण सहभागी होऊ शकेल आणि शिकू शकेल.`
+                question: "'प्रकल्प पद्धती' (Project Method) चे जनक कोणाला मानले जाते?",
+                year: "2016",
+                options: ["जॉन ड्यूई", "विल्यम किलपॅट्रिक", "मारिया माँटेसरी", "फ्रोबेल"],
+                correct: 1,
+                explanation: "विल्यम किलपॅट्रिक यांना 'प्रकल्प पद्धती'चे जनक मानले जाते. ही पद्धत जॉन ड्यूई यांच्या विचारांवर आधारित आहे, जी विद्यार्थ्यांना प्रत्यक्ष अनुभवातून शिकण्यास प्रोत्साहित करते."
             },
             {
-                year: 2013,
-                question: `पृथ्वीच्या वातावरणात कोणता वायू सर्वाधिक प्रमाणात आढळतो?`,
-                options: ["ऑक्सिजन", "आरगॉन", "नायट्रोजन", "कार्बन डायऑक्साइड"],
-                answer: "नायट्रोजन",
-                explanation: `पृथ्वीचे वातावरण सुमारे ७८% नायट्रोजन, २१% ऑक्सिजन, ०.९% आरगॉन आणि ०.१% इतर वायूंनी बनलेले आहे, ज्यात कार्बन डायऑक्साइडचा समावेश आहे.`
+                question: "खालीलपैकी कोणती एक 'संरक्षण यंत्रणा' (Defence Mechanism) नाही?",
+                year: "2017",
+                options: ["दमन (Repression)", "प्रक्षेपण (Projection)", "तादात्म्य (Identification)", "प्रेरणा (Motivation)"],
+                correct: 3,
+                explanation: "प्रेरणा ही वर्तनाला चालना देणारी शक्ती आहे. दमन, प्रक्षेपण आणि तादात्म्य या सर्व अचेतन मनाच्या संरक्षण यंत्रणा आहेत, ज्या चिंता आणि ताण कमी करण्यासाठी वापरल्या जातात."
             },
             {
-                year: 2014,
-                question: `खालीलपैकी कोणता प्राथमिक रंग (primary color) आहे?`,
-                options: ["हिरवा", "नारंगी", "निळा", "जांभळा"],
-                answer: "निळा",
-                explanation: `प्रकाशासाठी वापरल्या जाणाऱ्या अॅडिटिव्ह रंग मॉडेलमध्ये (RGB) लाल, हिरवा आणि निळा हे प्राथमिक रंग आहेत.`
+                question: "एरिक्सनच्या मनोसामाजिक विकास सिद्धांतानुसार, पौगंडावस्थेत (Adolescence) कोणती समस्या निर्माण होते?",
+                year: "2018",
+                options: ["विश्वास विरुद्ध अविश्वास", "ओळख विरुद्ध भूमिका गोंधळ (Identity vs. Role Confusion)", "उद्योगीपणा विरुद्ध न्यूनगंड", "स्वायत्तता विरुद्ध लाज व शंका"],
+                correct: 1,
+                explanation: "एरिक एरिक्सनच्या मते, पौगंडावस्थेत (सुमारे १२ ते १८ वर्षे) व्यक्ती 'ओळख विरुद्ध भूमिका गोंधळ' या मनोसामाजिक संकटातून जाते, जिथे ती स्वतःची ओळख शोधण्याचा प्रयत्न करते."
             },
             {
-                year: 2015,
-                question: `'ऑपरंट कंडिशनिंग' (operant conditioning) ही संकल्पना कोणी मांडली?`,
-                options: ["इव्हान पाव्हलॉव्ह", "बी.एफ. स्किनर", "जीन पियाजे", "अल्बर्ट बांडुरा"],
-                answer: "बी.एफ. स्किनर",
-                explanation: `बी.एफ. स्किनर यांना ऑपरंट कंडिशनिंगचे जनक मानले जाते, जिथे शिकणे हे वर्तनातील बदलाचे कार्य आहे. वर्तनातील बदल हे पर्यावरणातील घटनांना (उत्तेजना) व्यक्तीच्या प्रतिसादाचा परिणाम असतात.`
+                question: "बुद्ध्यांक (IQ) काढण्याचे सूत्र कोणते आहे?",
+                year: "2019",
+                options: ["(मानसिक वय / शारीरिक वय) x १००", "(शारीरिक वय / मानसिक वय) x १००", "मानसिक वय + शारीरिक वय", "मानसिक वय - शारीरिक वय"],
+                correct: 0,
+                explanation: "बुद्ध्यांक (Intelligence Quotient - IQ) काढण्याचे सूत्र आहे: IQ = (मानसिक वय / शारीरिक वय) × १००. हे सूत्र विल्यम स्टर्न यांनी विकसित केले आणि नंतर टर्मन यांनी ते प्रसिद्ध केले."
             },
             {
-                year: 2016,
-                question: `८ सेमी लांबी आणि ५ सेमी रुंदी असलेल्या आयताचे क्षेत्रफळ किती?`,
-                options: ["१३ सेमी²", "२६ सेमी²", "४० सेमी²", "३० सेमी²"],
-                answer: "४० सेमी²",
-                explanation: `आयताचे क्षेत्रफळ त्याची लांबी आणि रुंदी यांचा गुणाकार करून काढले जाते. क्षेत्रफळ = ८ सेमी * ५ सेमी = ४० सेमी².`
+                question: "अध्ययन अक्षमता (Learning Disability) असलेल्या मुलांमध्ये कोणती समस्या आढळू शकते?",
+                year: "2021",
+                options: ["डिस्लेक्सिया (वाचन समस्या)", "डिस्ग्राफिया (लेखन समस्या)", "डिस्कॅल्कुलिया (गणित समस्या)", "वरीलपैकी सर्व"],
+                correct: 3,
+                explanation: "अध्ययन अक्षमता ही एक न्यूरोलॉजिकल समस्या आहे. यामध्ये डिस्लेक्सिया (वाचनात अडचण), डिस्ग्राफिया (लिहिण्यात अडचण), आणि डिस्कॅल्कुलिया (गणितामध्ये अडचण) यांसारख्या विविध प्रकारच्या समस्यांचा समावेश होतो."
             },
             {
-                year: 2017,
-                question: `योग्य आर्टिकल निवडा: 'He is ___ honest man.'`,
-                options: ["a", "an", "the", "no article"],
-                answer: "an",
-                explanation: `'a' आणि 'an' मधील निवड पुढील शब्दाच्या ध्वनीवर अवलंबून असते. 'Honest' हा शब्द स्वराच्या ध्वनीने (o) सुरू होतो, म्हणून 'an' हे योग्य आर्टिकल आहे.`
+                question: "थॉर्नडाईकच्या प्रयत्न-प्रमाद सिद्धांतातील महत्त्वाचा नियम कोणता आहे?",
+                year: "2013",
+                options: ["परिणामाचा नियम (Law of Effect)", "सराव नियम (Law of Exercise)", "सज्जता नियम (Law of Readiness)", "वरीलपैकी सर्व"],
+                correct: 3,
+                explanation: "ई. एल. थॉर्नडाईकने अध्ययनाचे तीन मुख्य नियम दिले: सज्जतेचा नियम, सरावाचा नियम आणि परिणामाचा नियम. हे सर्व नियम त्याच्या प्रयत्न-प्रमाद (Trial and Error) सिद्धांतासाठी महत्त्वाचे आहेत."
             },
             {
-                year: 2018,
-                question: `रक्ताचा कोणता घटक रक्त गोठण्यास मदत करतो?`,
-                options: ["लाल रक्तपेशी", "पांढऱ्या रक्तपेशी", "प्लाझ्मा", "प्लेटलेट्स"],
-                answer: "प्लेटलेट्स",
-                explanation: `प्लेटलेट्स, किंवा थ्रोम्बोसाइट्स, आपल्या रक्तातील लहान, रंगहीन पेशींचे तुकडे आहेत जे गुठळ्या तयार करतात आणि रक्तस्त्राव थांबवतात किंवा प्रतिबंधित करतात.`
+                question: "सामाजिक अध्ययन सिद्धांत (Social Learning Theory) कोणी मांडला?",
+                year: "2016",
+                options: ["अल्बर्ट बांडुरा", "सिग्मंड फ्रॉइड", "जीन पियाजे", "बी. एफ. स्किनर"],
+                correct: 0,
+                explanation: "अल्बर्ट बांडुरा यांनी सामाजिक अध्ययन सिद्धांत मांडला. त्यांच्या मते, व्यक्ती निरीक्षण, अनुकरण आणि मॉडेलिंगद्वारे शिकते. त्यांनी 'बोबो डॉल' प्रयोगाद्वारे हा सिद्धांत सिद्ध केला."
             },
             {
-                year: 2019,
-                question: `महाराष्ट्राची राजधानी कोणती आहे?`,
-                options: ["पुणे", "नागपूर", "मुंबई", "नाशिक"],
-                answer: "मुंबई",
-                explanation: `मुंबई हे महाराष्ट्र राज्याची राजधानीचे शहर आहे. हे भारतातील सर्वाधिक लोकसंख्या असलेले शहर आहे.`
+                question: "स्मृतीचा (Memory) योग्य क्रम लावा: ",
+                year: "2017",
+                options: ["सांकेतिकीकरण, साठवण, प्रत्यानयन", "साठवण, सांकेतिकीकरण, प्रत्यानयन", "प्रत्यानयन, साठवण, सांकेतिकीकरण", "सांकेतिकीकरण, प्रत्यानयन, साठवण"],
+                correct: 0,
+                explanation: "स्मृती प्रक्रियेचे तीन मुख्य टप्पे आहेत. पहिला, सांकेतिकीकरण (Encoding) ज्यात माहिती स्वीकारली जाते. दुसरा, साठवण (Storage) ज्यात माहिती संग्रहित केली जाते. आणि तिसरा, प्रत्यानयन (Retrieval) ज्यात आवश्यकतेनुसार माहिती परत मिळवली जाते."
             },
             {
-                year: 2021,
-                question: `ब्लूमची वर्गीकरण प्रणाली (Bloom's Taxonomy) ही संज्ञानात्मक कौशल्यांची एक श्रेणीबद्ध मांडणी आहे. यात सर्वोच्च पातळी कोणती आहे?`,
-                options: ["विश्लेषण करणे", "लागू करणे", "तयार करणे", "मूल्यांकन करणे"],
-                answer: "तयार करणे",
-                explanation: `सुधारित ब्लूमच्या वर्गीकरण प्रणालीमध्ये, 'तयार करणे' (Creating) ही संज्ञानात्मक कौशल्यांची सर्वोच्च पातळी आहे. यात एक सुसंगत किंवा कार्यात्मक संपूर्ण तयार करण्यासाठी घटकांना एकत्र ठेवणे; घटकांची नवीन नमुन्यात किंवा संरचनेत पुनर्रचना करणे समाविष्ट आहे.`
+                question: "वायगॉटस्कीच्या मते, बालकाच्या विकासात सर्वात महत्त्वाची भूमिका कोणाची असते?",
+                year: "2018",
+                options: ["आनुवंशिकता", "शारीरिक परिपक्वता", "समाज आणि संस्कृती", "वैयक्तिक अनुभव"],
+                correct: 2,
+                explanation: "लेव्ह वायगॉटस्की यांनी सामाजिक-सांस्कृतिक सिद्धांतावर भर दिला. त्यांच्या मते, बालकाचा विकास हा त्याच्या सामाजिक संवाद आणि सांस्कृतिक वातावरणातून होतो. 'Zone of Proximal Development' ही त्यांची महत्त्वाची संकल्पना आहे."
+            },
+            {
+                question: "मूलभूत प्रवृत्तीचा (Instincts) सिद्धांत कोणी मांडला?",
+                year: "2021",
+                options: ["विल्यम जेम्स", "विल्यम मॅकडुगल", "अब्राहम मास्लो", "सिग्मंड फ्रॉइड"],
+                correct: 1,
+                explanation: "विल्यम मॅकडुगल यांनी प्रेरणा (Motivation) स्पष्ट करण्यासाठी मूलभूत प्रवृत्तीचा सिद्धांत मांडला. त्यांच्या मते, प्रत्येक प्रवृत्तीशी एक विशिष्ट भावना जोडलेली असते आणि ती मानवी वर्तनाला चालना देते."
             }
         ];
 
-        function renderQuiz() {
-            quizContainer.innerHTML = '';
-            questions.forEach((q, index) => {
-                const optionsHTML = q.options.map(option => `
-                    <div>
-                        <input type="radio" name="question${index}" id="q${index}o${option.replace(/\s+/g, '')}" value="${option}" class="hidden">
-                        <label for="q${index}o${option.replace(/\s+/g, '')}" class="option-label block w-full p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
-                            ${option}
-                        </label>
-                    </div>
-                `).join('');
+        const quizContainer = document.getElementById('quiz-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultContainer = document.getElementById('result-container');
+        const scoreElement = document.getElementById('score');
+        const feedbackElement = document.getElementById('feedback');
 
-                const questionHTML = `
-                    <div class="question-card bg-white p-6 rounded-lg shadow-md mb-6 relative">
-                        <div class="flex justify-between items-start mb-4">
-                            <p class="text-lg font-semibold text-gray-800"><span class="text-emerald-600 font-bold">${index + 1}.</span> ${q.question}</p>
-                            <span class="bg-gray-200 text-gray-700 text-xs font-bold px-3 py-1 rounded-full">${q.year}</span>
-                        </div>
-                        <div class="space-y-3">${optionsHTML}</div>
-                        <div class="absolute bottom-2 right-3 text-xs text-gray-400 font-semibold">सक्सेस डिजिटल क्लासेस</div>
-                    </div>
-                `;
-                quizContainer.innerHTML += questionHTML;
-            });
+        // Function to shuffle array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
         
-        function showResults() {
+        // Load and display questions
+        function loadQuiz() {
+            // Shuffle the quiz data to show questions in random order
+            const shuffledQuestions = shuffle(quizData);
+
+            shuffledQuestions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'bg-white p-6 rounded-lg shadow-md transition-all duration-300 relative';
+                
+                const brandingElement = document.createElement('div');
+                brandingElement.className = 'absolute top-2 right-3 text-xs font-semibold text-blue-400';
+                brandingElement.innerText = 'Success Digital Classes';
+                
+                const questionText = document.createElement('p');
+                questionText.className = 'text-lg font-semibold text-slate-800 mb-4';
+                questionText.innerHTML = `प्रश्न ${index + 1}: ${q.question} <span class="text-sm font-normal text-slate-500 ml-2">(${q.year})</span>`;
+                
+                const optionsElement = document.createElement('div');
+                optionsElement.className = 'space-y-3';
+                
+                q.options.forEach((option, i) => {
+                    const optionContainer = document.createElement('div');
+                    
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.id = `q${index}_option${i}`;
+                    radioInput.name = `question${index}`;
+                    radioInput.value = i;
+                    radioInput.className = 'hidden';
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `q${index}_option${i}`;
+                    label.innerText = option;
+                    label.className = 'block w-full p-3 border-2 border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition';
+                    
+                    optionContainer.appendChild(radioInput);
+                    optionContainer.appendChild(label);
+                    optionsElement.appendChild(optionContainer);
+                });
+                
+                const explanationElement = document.createElement('div');
+                explanationElement.id = `explanation${index}`;
+                explanationElement.className = 'hidden mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 text-slate-700 rounded-r-lg';
+                explanationElement.innerHTML = `<strong class="font-bold">स्पष्टीकरण:</strong> ${q.explanation}`;
+                
+                questionElement.appendChild(brandingElement);
+                questionElement.appendChild(questionText);
+                questionElement.appendChild(optionsElement);
+                questionElement.appendChild(explanationElement);
+                quizContainer.appendChild(questionElement);
+            });
+        }
+
+        submitBtn.addEventListener('click', () => {
             let score = 0;
-            reviewSection.innerHTML = '';
-
-            questions.forEach((q, index) => {
+            const shuffledQuestions = quizData; // Use the same shuffled order
+            
+            shuffledQuestions.forEach((q, index) => {
                 const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
-                const userAnswer = selectedOption ? selectedOption.value : null;
-                const isCorrect = userAnswer === q.answer;
+                const explanation = document.getElementById(`explanation${index}`);
+                explanation.classList.remove('hidden');
 
-                if (isCorrect) {
-                    score++;
+                const labels = document.querySelectorAll(`label[for^="q${index}_option"]`);
+                
+                // Show correct answer
+                labels[q.correct].parentElement.classList.add('correct-answer');
+
+                if (selectedOption) {
+                    if (parseInt(selectedOption.value) === q.correct) {
+                        score++;
+                    } else {
+                        // Show wrong answer if selected
+                        labels[parseInt(selectedOption.value)].parentElement.classList.add('wrong-answer');
+                    }
                 }
 
-                const optionsReviewHTML = q.options.map(option => {
-                    let liClass = 'p-3 border rounded-md text-gray-700';
-                    if (option === q.answer) {
-                        liClass += ' correct-answer';
-                    }
-                    if (option === userAnswer && !isCorrect) {
-                         liClass += ' incorrect-answer';
-                    }
-                    return `<li class="${liClass}">${option}</li>`;
-                }).join('');
-
-                const reviewHTML = `
-                    <div class="bg-white p-5 rounded-lg shadow-sm">
-                        <p class="font-semibold text-gray-800 mb-3">${index + 1}. ${q.question}</p>
-                        <ul class="space-y-2 mb-3">${optionsReviewHTML}</ul>
-                         ${userAnswer === null ? `<p class="text-sm font-bold text-yellow-600">तुमचे उत्तर: प्रयत्न केला नाही</p>` : ''}
-                        <div class="bg-blue-50 border border-blue-200 p-3 rounded-md mt-4">
-                            <p class="font-bold text-blue-800">स्पष्टीकरण:</p>
-                            <p class="text-blue-700">${q.explanation}</p>
-                        </div>
-                    </div>
-                `;
-                reviewSection.innerHTML += reviewHTML;
+                // Disable all radio buttons for this question
+                document.querySelectorAll(`input[name="question${index}"]`).forEach(radio => {
+                    radio.disabled = true;
+                });
             });
             
-            quizContainer.classList.add('hidden');
-            submitButton.classList.add('hidden');
-            resultsContainer.classList.remove('hidden');
-
-            scoreElement.textContent = `${score} / ${questions.length}`;
+            scoreElement.innerText = `${score} / ${shuffledQuestions.length}`;
             
-            let message = '';
-            const percentage = (score / questions.length) * 100;
+            let feedbackText = '';
+            const percentage = (score / shuffledQuestions.length) * 100;
             if (percentage >= 80) {
-                message = "उत्कृष्ट कार्य! तुमची संकल्पनांवर चांगली पकड आहे.";
+                feedbackText = 'उत्तम कामगिरी! तुमचा अभ्यास योग्य दिशेने आहे.';
             } else if (percentage >= 60) {
-                message = "चांगले काम! थोडा अधिक सराव तुम्हाला परिपूर्ण बनवेल.";
+                feedbackText = 'चांगला प्रयत्न! आणखी सरावाची गरज आहे.';
             } else {
-                message = "सराव करत रहा! तुमचा स्कोर सुधारण्यासाठी स्पष्टीकरणे तपासा.";
+                feedbackText = 'तुमच्या निकालात सुधारणा आवश्यक आहे. संकल्पना पुन्हा वाचा.';
             }
-            scoreMessageElement.textContent = message;
-
-            window.scrollTo(0, 0);
-        }
-
-        submitButton.addEventListener('click', showResults);
-        
-        restartButton.addEventListener('click', () => {
-            resultsContainer.classList.add('hidden');
-            quizContainer.classList.remove('hidden');
-            submitButton.classList.remove('hidden');
-            renderQuiz();
-            window.scrollTo(0, 0);
+            feedbackElement.innerText = feedbackText;
+            
+            resultContainer.classList.remove('hidden');
+            submitBtn.style.display = 'none'; // Hide submit button
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
         });
 
-        // Initial render of the quiz
-        renderQuiz();
+        // Load the quiz on page load
+        loadQuiz();
     </script>
 </body>
 </html>
